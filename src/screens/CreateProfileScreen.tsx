@@ -11,11 +11,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import SignupForm from "../components/SignupForm";
+import CreateProfileForm from "../components/CreateProfileForm";
 import { RootStackParamList } from "../types";
 import { Colors } from "../utils/constants";
 
-const SignupScreen: FC<
+const CreateProfileScreen: FC<
   NativeStackScreenProps<RootStackParamList, "Signup">
 > = ({ navigation }) => {
   const [loaded] = useFonts({
@@ -27,8 +27,8 @@ const SignupScreen: FC<
     return <AppLoading />;
   }
 
-  const onAfterSignup = () => {
-    navigation.navigate("CreateProfile");
+  const onAfterCreateProfile = () => {
+    navigation.navigate("Dashboard");
   };
 
   return (
@@ -38,20 +38,14 @@ const SignupScreen: FC<
       imageStyle={styles.bg}
     >
       <View style={styles.header}>
-        <Text style={styles.headingText}>Create better together.</Text>
+        <Text style={styles.headingText}>We just need few more details</Text>
         <Text style={styles.leadText}>Join our community</Text>
       </View>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <KeyboardAvoidingView behavior="padding" style={{ flexGrow: 1 }}>
           <View style={styles.main}>
-            <Text style={styles.signupText}>Sign up now</Text>
-            <SignupForm onAfterSignup={onAfterSignup} />
-            <TouchableOpacity onPress={() => navigation.navigate("Signin")}>
-              <Text style={styles.footText}>
-                Already registered?{" "}
-                <Text style={styles.signinLink}>Sign in</Text>
-              </Text>
-            </TouchableOpacity>
+            <Text style={styles.signupText}>Complete your profile</Text>
+            <CreateProfileForm onAfterCreateProfile={onAfterCreateProfile} />
           </View>
         </KeyboardAvoidingView>
       </ScrollView>
@@ -59,7 +53,7 @@ const SignupScreen: FC<
   );
 };
 
-export default SignupScreen;
+export default CreateProfileScreen;
 
 const styles = StyleSheet.create({
   bg: {

@@ -11,12 +11,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import SignupForm from "../components/SignupForm";
+import SigninForm from "../components/SigninForm";
 import { RootStackParamList } from "../types";
 import { Colors } from "../utils/constants";
 
-const SignupScreen: FC<
-  NativeStackScreenProps<RootStackParamList, "Signup">
+const SigninScreen: FC<
+  NativeStackScreenProps<RootStackParamList, "Signin">
 > = ({ navigation }) => {
   const [loaded] = useFonts({
     CocoSharpLBold: require("../assets/fonts/CocoSharpL-Bold.otf"),
@@ -27,8 +27,8 @@ const SignupScreen: FC<
     return <AppLoading />;
   }
 
-  const onAfterSignup = () => {
-    navigation.navigate("CreateProfile");
+  const onAfterSignin = (hasProfile: boolean) => {
+    navigation.navigate(hasProfile ? "Dashboard" : "CreateProfile");
   };
 
   return (
@@ -38,18 +38,17 @@ const SignupScreen: FC<
       imageStyle={styles.bg}
     >
       <View style={styles.header}>
-        <Text style={styles.headingText}>Create better together.</Text>
-        <Text style={styles.leadText}>Join our community</Text>
+        <Text style={styles.headingText}>Welcome back</Text>
+        <Text style={styles.leadText}>Continue your journey</Text>
       </View>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <KeyboardAvoidingView behavior="padding" style={{ flexGrow: 1 }}>
           <View style={styles.main}>
-            <Text style={styles.signupText}>Sign up now</Text>
-            <SignupForm onAfterSignup={onAfterSignup} />
-            <TouchableOpacity onPress={() => navigation.navigate("Signin")}>
+            <Text style={styles.signinText}>Sign in now</Text>
+            <SigninForm onAfterSignin={onAfterSignin} />
+            <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
               <Text style={styles.footText}>
-                Already registered?{" "}
-                <Text style={styles.signinLink}>Sign in</Text>
+                Not registered? <Text style={styles.signupLink}>Sign up</Text>
               </Text>
             </TouchableOpacity>
           </View>
@@ -59,7 +58,7 @@ const SignupScreen: FC<
   );
 };
 
-export default SignupScreen;
+export default SigninScreen;
 
 const styles = StyleSheet.create({
   bg: {
@@ -90,7 +89,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     fontSize: 20,
   },
-  signupText: {
+  signinText: {
     fontFamily: "CocoSharpLBold",
     fontSize: 24,
   },
@@ -98,7 +97,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontFamily: "CocoSharpLRegular",
   },
-  signinLink: {
+  signupLink: {
     color: Colors.primary,
     fontFamily: "CocoSharpLBold",
   },

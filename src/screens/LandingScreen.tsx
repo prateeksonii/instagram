@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -9,18 +9,39 @@ import {
 import AppLoading from "expo-app-loading";
 import { useFonts } from "expo-font";
 import { Feather } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
+import { privateApi } from "../services/api";
 
 const LandingScreen: FC<
   NativeStackScreenProps<RootStackParamList, "Landing">
 > = ({ navigation }) => {
-  const [loaded] = useFonts({
+  const [loadedState, setLoadedState] = useState(false);
+
+  const [loadedFonts] = useFonts({
     CocoSharpLBold: require("../assets/fonts/CocoSharpL-Bold.otf"),
     CocoSharpLRegular: require("../assets/fonts/CocoSharpL-Regular.otf"),
   });
 
-  if (!loaded) {
+  useEffect(() => {
+    const initApp = async () => {
+      const token = await AsyncStorage.getItem("instagram_clone_token");
+      if (!token) {
+        return setLoadedState(true);
+      }
+
+      await privateApi
+        .post("/api/v1/users/me")
+        .catch((err) => setLoadedState(true));
+
+      navigation.navigate("Dashboard");
+    };
+
+    initApp();
+  }, []);
+
+  if (!loadedFonts || !loadedState) {
     return <AppLoading />;
   }
 
